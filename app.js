@@ -1,10 +1,14 @@
 const express = require("express");
 
+const logger = require("./middlewares/logger");
+
 const productosRouter = require("./routes/productos.routes");
 
 const app = express();
 
 app.use(express.json());
+
+app.use(logger);
 
 app.use("/productos", productosRouter);
 

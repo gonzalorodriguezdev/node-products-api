@@ -1,5 +1,7 @@
 const express = require("express");
 
+const validarProducto = require("../middlewares/validarProducto");
+
 const {
   obtenerProductos,
   obtenerProducto,
@@ -14,9 +16,9 @@ router.get("/", obtenerProductos);
 
 router.get("/:id", obtenerProducto);
 
-router.post("/", crearProducto);
+router.post("/", validarProducto, crearProducto);
 
-router.put("/:id", actualizarProducto);
+router.put("/:id", validarProducto, actualizarProducto);
 
 router.delete("/:id", eliminarProducto);
 

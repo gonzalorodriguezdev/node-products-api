@@ -24,12 +24,6 @@ function obtenerProducto(req, res) {
 function crearProducto(req, res) {
   const nuevoProducto = req.body;
 
-  if (
-    typeof nuevoProducto.nombre !== "string" ||
-    typeof nuevoProducto.precio !== "number"
-  ) {
-    return res.status(400).send("Datos inválidos");
-  }
   const productoCreado = crear(nuevoProducto);
 
   res.status(201).json(productoCreado);
@@ -40,12 +34,6 @@ function actualizarProducto(req, res) {
 
   const datosActualizados = req.body;
 
-  if (
-    typeof datosActualizados.nombre !== "string" ||
-    typeof datosActualizados.precio !== "number"
-  ) {
-    return res.status(400).send("Datos inválidos");
-  }
   const resultado = actualizar(id, datosActualizados);
 
   if (!resultado) {
