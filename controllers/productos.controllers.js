@@ -1,13 +1,19 @@
-const productos = require("../data/productos");
+const {
+  buscarPorId,
+  obtenerTodos,
+  crear,
+  actualizar,
+  eliminar,
+} = require("../services/productos.service");
 
 function obtenerProductos(req, res) {
-  res.json(productos);
+  res.json(obtenerTodos());
 }
 
 function obtenerProducto(req, res) {
   const id = Number(req.params.id);
 
-  const productoE = productos.find((p) => p.id === id);
+  const productoE = buscarPorId(id);
 
   if (!productoE) {
     return res.status(404).send("Producto no encontrado");
@@ -24,21 +30,13 @@ function crearProducto(req, res) {
   ) {
     return res.status(400).send("Datos inválidos");
   }
-  nuevoProducto.id = productos.length + 1;
+  const productoCreado = crear(nuevoProducto);
 
-  productos.push(nuevoProducto);
-
-  res.status(201).json(nuevoProducto);
+  res.status(201).json(productoCreado);
 }
 
 function actualizarProducto(req, res) {
   const id = Number(req.params.id);
-
-  const indice = productos.findIndex((p) => p.id === id);
-
-  if (indice === -1) {
-    return res.status(404).send("Producto no encontrado");
-  }
 
   const datosActualizados = req.body;
 
@@ -48,23 +46,23 @@ function actualizarProducto(req, res) {
   ) {
     return res.status(400).send("Datos inválidos");
   }
+  const resultado = actualizar(id, datosActualizados);
 
-  productos[indice].nombre = datosActualizados.nombre;
-  productos[indice].precio = datosActualizados.precio;
+  if (!resultado) {
+    return res.status(404).send("Producto no encontrado");
+  }
 
-  res.json(productos[indice]);
+  res.json(resultado);
 }
 
 function eliminarProducto(req, res) {
   const id = Number(req.params.id);
 
-  const indice = productos.findIndex((producto) => producto.id === id);
+  const resultado = eliminar(id);
 
-  if (indice === -1) {
+  if (!resultado) {
     return res.status(404).send("Producto no encontrado");
   }
-
-  productos.splice(indice, 1);
 
   res.send("Producto eliminado");
 }
